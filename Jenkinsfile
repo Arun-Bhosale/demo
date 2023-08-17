@@ -13,7 +13,9 @@ pipeline {
            steps {
                echo 'Building..'
                sh 'docker image build -t $DOCKER_HUB_REPO:latest .'
-               dockerImage = docker.build("arunbhosale/flask-hello-world:latest")
+               script{
+                   def dockerImage = docker.build("arunbhosale/flask-hello-world:latest")
+               }
            }
        }
        stage('Test') {
@@ -27,8 +29,10 @@ pipeline {
        stage('Push') {
            steps {
                withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {
-               echo 'Pushing image..'
-               dockerImage.push()
+                   echo 'Pushing image..'
+                   script{
+                       dockerImage.push()
+                   }
                }
            }
        }
