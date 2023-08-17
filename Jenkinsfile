@@ -34,7 +34,8 @@ pipeline {
                echo 'Pushing image..'
                script {
                    docker.withRegistry( '', registryCredential ) {
-                   dockerImage.push()
+                       dockerImage.push()
+                   }
                }
            }
        }
