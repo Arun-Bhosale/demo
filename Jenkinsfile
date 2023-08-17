@@ -13,6 +13,7 @@ pipeline {
            steps {
                echo 'Building..'
                sh 'docker image build -t $DOCKER_HUB_REPO:latest .'
+               dockerImage = docker.build("arunbhosale/flask-hello-world:latest")
            }
        }
        stage('Test') {
@@ -25,15 +26,9 @@ pipeline {
        }
        stage('Push') {
            steps {
-               withCredentials([
-                    usernamePassword(
-                        credentialsId: 'dockerhub', 
-                        usernameVariable: 'USER', 
-                        passwordVariable: 'PASS'
-                        )]) {
+               withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {
                echo 'Pushing image..'
-               sh 'echo ${PASS} | docker login -u ${USER} --password-stdin'
-               sh 'docker push $DOCKER_HUB_REPO:latest'
+               dockerImage.push()
                }
            }
        }
