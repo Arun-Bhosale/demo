@@ -5,7 +5,7 @@ pipeline {
        DOCKER_HUB_REPO = "arunbhosale/flask-hello-world"
        CONTAINER_NAME = "flask-hello-world"
        registry = "arunbhosale/flask-hello-world"
-       registryCredential = 'dockerhub'
+       registryCredential = 'dockerhubcreds'
        dockerImage = ''
    }
   
