@@ -34,6 +34,7 @@ pipeline {
                echo 'Pushing image..'
                sh 'echo ${PASS} | docker login -u ${USER} --password-stdin'
                sh 'docker push $DOCKER_HUB_REPO:latest'
+               }
            }
        }
        stage('Deploy') {
