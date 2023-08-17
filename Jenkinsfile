@@ -4,7 +4,9 @@ pipeline {
    environment {
        DOCKER_HUB_REPO = "arunbhosale/flask-hello-world"
        CONTAINER_NAME = "flask-hello-world"
-       DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+       registry = "arunbhosale/flask-hello-world"
+       registryCredential = 'dockerhub'
+       dockerImage = ''
    }
   
    stages {
@@ -14,6 +16,9 @@ pipeline {
            steps {
                echo 'Building..'
                sh 'docker image build -t $DOCKER_HUB_REPO:latest .'
+               script {
+                   dockerImage = docker.build registry + ":latest"
+               }
            }
        }
        stage('Test') {
@@ -27,8 +32,10 @@ pipeline {
        stage('Push') {
            steps {
                echo 'Pushing image..'
-               sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-               sh 'docker push $DOCKER_HUB_REPO:latest'
+               script {
+                   docker.withRegistry( '', registryCredential ) {
+                   dockerImage.push()
+               }
            }
        }
        stage('Deploy') {
