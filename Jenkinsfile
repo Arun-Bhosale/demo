@@ -14,8 +14,6 @@ pipeline {
       
        stage('Build') {
            steps {
-               echo 'Building..'
-               sh 'docker image build -t $DOCKER_HUB_REPO:latest .'
                script {
                    dockerImage = docker.build registry + ":latest"
                }
@@ -31,7 +29,6 @@ pipeline {
        }
        stage('Push') {
            steps {
-               echo 'Pushing image..'
                script {
                    docker.withRegistry( '', registryCredential ) {
                        dockerImage.push()
